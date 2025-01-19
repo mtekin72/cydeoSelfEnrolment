@@ -28,7 +28,7 @@ export default class LoginPage extends BasePage {
     await this.page.setExtraHTTPHeaders({
       Authorization: `Basic ${encodedCredential}`,
     });
-    await this.page.goto(process.env.BASE_URL);
+    await this.page.goto("https://qa.sep.tdtm.cydeo.com/taws");
     await this.page.waitForTimeout(3000);
   }
 }
