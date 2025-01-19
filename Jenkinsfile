@@ -28,15 +28,14 @@ pipeline {
         stage('Run Tests') {
             steps {
                 withEnv(["BASE_URL=${env.BASE_URL}", "USERNAME=${env.USERNAME}", "PASSWORD=${env.PASSWORD}"]) {
-                    sh 'npm run test:specific'  // Adjust this to your desired test command
+                    sh 'npm run tests'  // Adjust this to your desired test command
                 }
             }
             
             post {
                 always {
-                    junit '**/test-results/**/*.xml'  // Adjust path if necessary
-                    archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
-                }
+            junit 'test-results/**/*.xml'  // Adjust path to match Playwright's output
+        }
             }
         }
     }
