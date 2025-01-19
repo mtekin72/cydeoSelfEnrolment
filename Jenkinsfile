@@ -12,11 +12,12 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+                sh 'npx playwright install' 
             }
         }
         stage('Run Tests') {
             steps {
-                sh 'npm run tests'
+                sh 'npm run test:specific'
             }
         }
     }
