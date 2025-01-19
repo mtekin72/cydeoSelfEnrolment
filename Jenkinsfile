@@ -8,7 +8,7 @@ pipeline {
     }
     
     tools {
-        nodejs 'NodeJS'  // Ensure this matches your Jenkins NodeJS tool configuration
+        nodejs 'NodeJS'
     }
     
     stages {
@@ -21,21 +21,27 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'npx playwright install'  // Install Playwright browsers
+                sh 'npx playwright install'
             }
         }
         
         stage('Run Tests') {
             steps {
-                withEnv(["BASE_URL=${env.BASE_URL}", "USERNAME=${env.USERNAME}", "PASSWORD=${env.PASSWORD}"]) {
-                    sh 'npm run tests'  // Adjust this to your desired test command
+                script {
+                    withEnv([
+                        "BASE_URL=${env.BASE_URL}", 
+                        "USERNAME=${env.USERNAME}", 
+                        "PASSWORD=${env.PASSWORD}"
+                    ]) {
+                        sh 'npm run tests'
+                    }
                 }
             }
             
             post {
                 always {
-            junit 'test-results/**/*.xml'  // Adjust path to match Playwright's output
-        }
+                    junit 'test-results/**/*.xml'
+                }
             }
         }
     }

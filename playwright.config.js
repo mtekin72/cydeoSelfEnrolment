@@ -15,7 +15,7 @@ export default defineConfig({
       },
       use: {
         trace: "on-first-retry",
-        baseURL: process.env.BASE_URL,
+        baseURL: process.env.BASE_URL || "https://qa.sep.tdtm.cydeo.com/taws",
         browserName: "chromium",
         headless: true,
         ...devices["Desktop Chrome"],
