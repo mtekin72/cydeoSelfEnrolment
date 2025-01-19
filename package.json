@@ -1,0 +1,21 @@
+{
+  "name": "cydeoenrolment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:specific": "npx playwright test ",
+    "test:tag": "npx playwright test --greb @test1",
+    "report": "npx playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.10.2"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.49.1",
+    "dotenv": "^16.4.7"
+  }
+}
