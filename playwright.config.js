@@ -7,14 +7,14 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
-  reporter: "html",
+ // reporter: "html",
   projects: [
     {
       timeout: 30 * 1000,
       expect: {
         timeout: 5000,
       },
-      // reporter: [["html", { outputFolder: "playwright-report" }]],
+     reporter: [["html", { outputFolder: "playwright-report" }]],
       use: {
         trace: "on-first-retry",
         baseURL: process.env.BASE_URL,
