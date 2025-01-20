@@ -22,7 +22,7 @@ export default defineConfig({
         trace: "on-first-retry",
         baseURL: process.env.BASE_URL,
         browserName: "chromium",
-        headless: false,
+        headless: true,
         ...devices["Desktop Chrome"],
         viewport: { width: 1280, height: 1000 },
         screenshot: "only-on-failure",
