@@ -1,6 +1,6 @@
 pipeline {
-    agent none
-    
+    agent none // Use specific agents for each stage
+
     stages {
         stage('Checkout') {
             agent any
@@ -39,7 +39,8 @@ pipeline {
 
     post {
         always {
-            node { // Use any available agent for post actions
+            agent any // Ensure post actions run on any available agent
+            steps {
                 archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             }
         }
