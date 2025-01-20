@@ -1,16 +1,14 @@
 pipeline {
-    agent none // Define agents at the stage level
+    agent any // Use any available agent for the entire pipeline
 
     stages {
         stage('Checkout') {
-            agent any
             steps {
                 checkout scm
             }
         }
 
         stage('Install Dependencies') {
-            agent any
             steps {
                 script {
                     sh 'node -v' // Validate Node.js installation
@@ -22,7 +20,6 @@ pipeline {
         }
 
         stage('Run Tests') {
-            agent any
             steps {
                 script {
                     withEnv([
@@ -39,9 +36,7 @@ pipeline {
 
     post {
         always {
-            node { // Run post actions in a node
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            }
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
         }
         failure {
             echo 'Tests failed. Please check the test results.'
