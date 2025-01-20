@@ -1,24 +1,28 @@
 pipeline {
-    agent none // Ensures no global agent is used
+    agent none
     
     stages {
         stage('Checkout') {
-            agent any // Runs on any available node/agent
+            agent any
             steps {
                 checkout scm
             }
         }
 
         stage('Install Dependencies') {
-            agent any // Runs on any available node/agent
+            agent any
             steps {
-                sh 'npm ci'
-                sh 'npx playwright install --with-deps'
+                script {
+                    sh 'node -v' // Validate Node.js installation
+                    sh 'npm -v'  // Validate npm installation
+                    sh 'npm ci'
+                    sh 'npx playwright install --with-deps'
+                }
             }
         }
 
         stage('Run Tests') {
-            agent any // Runs on any available node/agent
+            agent any
             steps {
                 script {
                     withEnv([
@@ -35,8 +39,7 @@ pipeline {
 
     post {
         always {
-            // Ensure to surround the step with the 'node' block for archiveArtifacts
-            node('my-agent') {  // Specify the Jenkins agent's label here
+            node { // Use any available agent for post actions
                 archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             }
         }
