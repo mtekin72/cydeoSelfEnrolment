@@ -1,0 +1,48 @@
+<testsuites id="" name="" tests="7" failures="0" skipped="0" errors="0" time="44.301445">
+<testsuite name="form-test.spec.js" timestamp="2025-01-20T07:31:21.153Z" hostname="" tests="4" failures="0" skipped="0" time="27.758" errors="0">
+<testcase name="Payment Validation E2E Test › validates payment process  of Upfront Payment and next button is not visible until payment plan is selected" classname="form-test.spec.js" time="6.475">
+</testcase>
+<testcase name="Payment Validation E2E Test › Verify Payment Steps Page" classname="form-test.spec.js" time="5.631">
+<system-out>
+<![CDATA[Step elements: [
+  locator('.step').first(),
+  locator('.step').nth(1),
+  locator('.step').nth(2)
+]
+Step classes: [
+  [32m'step ng-star-inserted done'[39m,
+  [32m'step ng-star-inserted editing'[39m,
+  [32m'step ng-star-inserted'[39m
+]
+]]>
+</system-out>
+</testcase>
+<testcase name="Payment Validation E2E Test › Verify Card Invalid Imput" classname="form-test.spec.js" time="7.852">
+</testcase>
+<testcase name="Payment Validation E2E Test ›  Validate Card Form fields with valid data " classname="form-test.spec.js" time="7.8">
+</testcase>
+</testsuite>
+<testsuite name="test-01.spec.js" timestamp="2025-01-20T07:31:21.153Z" hostname="" tests="3" failures="0" skipped="0" time="14.973" errors="0">
+<testcase name="Check that there are three circle steps" classname="test-01.spec.js" time="4.953">
+<system-out>
+<![CDATA[1
+2
+3
+[ [32m'1'[39m, [32m'2'[39m, [32m'3'[39m ]
+]]>
+</system-out>
+</testcase>
+<testcase name="Check that there are three circle steps-second option" classname="test-01.spec.js" time="4.975">
+<system-out>
+<![CDATA[[ [32m'1'[39m, [32m'2'[39m, [32m'3'[39m ]
+]]>
+</system-out>
+</testcase>
+<testcase name="Validate that that step names are correct" classname="test-01.spec.js" time="5.045">
+<system-out>
+<![CDATA[Actual Steps: Start Application,Payment plan,Review
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
