@@ -1,5 +1,5 @@
 pipeline {
-    agent any // Use any available Jenkins agent
+    agent any // This ensures the pipeline runs on any available agent
 
     environment {
         BASE_URL = 'https://qa.sep.tdtm.cydeo.com/taws'
@@ -38,16 +38,6 @@ pipeline {
 
     post {
         always {
-            // Wrap post-build actions in a node block
-            node {
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            }
-        }
-        failure {
-            echo 'Tests failed. Please check the test results.'
-        }
-        success {
-            echo 'All tests passed successfully!'
-        }
-    }
-}
+            // Ensure "label" is not required
+            agent any // Add this for post-build actions if node fails
+            archiveArtifacts artifacts: 'playwright
