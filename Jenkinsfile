@@ -7,14 +7,19 @@ pipeline {
         PASSWORD = credentials('automation-user-password')
     }
     
-    tools {
-        nodejs 'NodeJS'
-    }
-    
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+        
+        stage('Debug Credentials') {
+            steps {
+                script {
+                    echo "USERNAME: ${env.USERNAME}"
+                    echo "PASSWORD: [REDACTED]" // Never log passwords directly
+                }
             }
         }
         
@@ -29,26 +34,12 @@ pipeline {
             steps {
                 script {
                     withEnv([
-                        "BASE_URL=${env.BASE_URL}", 
-                        "USERNAME=${env.USERNAME}", 
+                        "BASE_URL=${env.BASE_URL}",
+                        "USERNAME=${env.USERNAME}",
                         "PASSWORD=${env.PASSWORD}"
                     ]) {
                         sh 'npx playwright test'
                     }
-                }
-            }
-            
-            post {
-                always {
-                    junit 'results/junit-results.xml'
-                    publishHTML(target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'playwright-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Playwright Report'
-                    ])
                 }
             }
         }
@@ -56,9 +47,7 @@ pipeline {
     
     post {
         always {
-            node('') { // Use an empty label to indicate the default agent
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            }
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
         }
         failure {
             echo 'Tests failed. Please check the test results.'
