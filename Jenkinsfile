@@ -39,7 +39,6 @@ pipeline {
             }
             post {
                 always {
-                    // Ensure the JUnit results file exists
                     junit 'results/junit-results.xml'
                     publishHTML(target: [
                         allowMissing: false,
@@ -56,7 +55,9 @@ pipeline {
     
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            node {
+                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            }
         }
         failure {
             echo 'Tests failed. Please check the test results.'
