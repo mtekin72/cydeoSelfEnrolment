@@ -37,6 +37,7 @@ pipeline {
                     }
                 }
             }
+            
             post {
                 always {
                     junit 'results/junit-results.xml'
@@ -55,7 +56,7 @@ pipeline {
     
     post {
         always {
-            node {
+            node('') { // Use an empty label to indicate the default agent
                 archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             }
         }
