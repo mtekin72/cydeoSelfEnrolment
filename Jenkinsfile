@@ -1,5 +1,5 @@
 pipeline {
-    agent any // Assign to any available node
+    agent any // Use any available Jenkins agent
 
     environment {
         BASE_URL = 'https://qa.sep.tdtm.cydeo.com/taws'
@@ -11,15 +11,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('Debug Credentials') {
-            steps {
-                script {
-                    echo "USERNAME: ${env.USERNAME}"
-                    echo "PASSWORD: [REDACTED]" // Never log passwords directly
-                }
             }
         }
 
@@ -47,7 +38,10 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            // Wrap post-build actions in a node block
+            node {
+                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            }
         }
         failure {
             echo 'Tests failed. Please check the test results.'
