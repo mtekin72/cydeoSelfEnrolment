@@ -3,8 +3,8 @@ pipeline {
     
     environment {
         BASE_URL = 'https://qa.sep.tdtm.cydeo.com/taws'
-        USERNAME = 'automation-user'
-        PASSWORD = '123abc'
+        USERNAME = credentials('automation-user-username')
+        PASSWORD = credentials('automation-user-password')
     }
     
     tools {
@@ -20,8 +20,8 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
-                sh 'npx playwright install'
+                sh 'npm ci'
+                sh 'npx playwright install --with-deps'
             }
         }
         
@@ -33,7 +33,7 @@ pipeline {
                         "USERNAME=${env.USERNAME}", 
                         "PASSWORD=${env.PASSWORD}"
                     ]) {
-                        sh 'npm run tests'
+                        sh 'npx playwright test'
                     }
                 }
             }
@@ -41,12 +41,23 @@ pipeline {
             post {
                 always {
                     junit 'test-results/**/*.xml'
+                    publishHTML(target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright Report'
+                    ])
                 }
             }
         }
     }
     
     post {
+        always {
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+        }
         failure {
             echo 'Tests failed. Please check the test results.'
         }

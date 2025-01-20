@@ -1,20 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 dotenv.config();
+
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
- // reporter: "html",
+  reporter: [
+    ["html", { outputFolder: "playwright-report" }],
+    ["junit", { outputFile: "results/junit-results.xml" }],
+  ],
   projects: [
     {
       timeout: 30 * 1000,
       expect: {
         timeout: 5000,
       },
-     reporter: [["html", { outputFolder: "playwright-report" }]],
       use: {
         trace: "on-first-retry",
         baseURL: process.env.BASE_URL,
