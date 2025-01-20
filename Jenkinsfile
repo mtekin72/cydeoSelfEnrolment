@@ -38,7 +38,10 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            // Move archiveArtifacts inside node block
+            node {
+                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            }
         }
         failure {
             echo 'Tests failed. Please check the test results.'
