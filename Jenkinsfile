@@ -3,12 +3,12 @@ pipeline {
     
     environment {
         BASE_URL = 'https://qa.sep.tdtm.cydeo.com/taws'
-        USERNAME = credentials('automation-user-username')
-        PASSWORD = credentials('automation-user-password')
+        CREDENTIALS = credentials('automation-user-credentials')
     }
     
-    tools {
-        nodejs 'NodeJS'
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 1, unit: 'HOURS')
     }
     
     stages {
@@ -27,28 +27,10 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                script {
-                    withEnv([
-                        "BASE_URL=${env.BASE_URL}", 
-                        "USERNAME=${env.USERNAME}", 
-                        "PASSWORD=${env.PASSWORD}"
-                    ]) {
-                        sh 'npx playwright test'
-                    }
-                }
-            }
-            
-            post {
-                always {
-                    junit 'results/junit-results.xml'
-                    publishHTML(target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'playwright-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Playwright Report'
-                    ])
+                withEnv(["BASE_URL=${env.BASE_URL}", 
+                         "USERNAME=${CREDENTIALS_USR}", 
+                         "PASSWORD=${CREDENTIALS_PSW}"]) {
+                    sh 'npx playwright test'
                 }
             }
         }
@@ -56,6 +38,15 @@ pipeline {
     
     post {
         always {
+            junit 'results/junit-results.xml'
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright Report'
+            ])
             archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
         }
         failure {
