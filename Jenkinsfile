@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent any // Assign to any available node
 
     environment {
         BASE_URL = 'https://qa.sep.tdtm.cydeo.com/taws'
@@ -47,9 +47,7 @@ pipeline {
 
     post {
         always {
-            node { // Ensure this step is inside a node block
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            }
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
         }
         failure {
             echo 'Tests failed. Please check the test results.'
