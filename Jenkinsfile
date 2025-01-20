@@ -38,6 +38,13 @@ pipeline {
 
     post {
         always {
-            // Ensure "label" is not required
-            agent any // Add this for post-build actions if node fails
-            archiveArtifacts artifacts: 'playwright
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+        }
+        failure {
+            echo 'Tests failed. Please check the test results.'
+        }
+        success {
+            echo 'All tests passed successfully!'
+        }
+    }
+}
