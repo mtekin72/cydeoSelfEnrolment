@@ -1,20 +1,16 @@
 pipeline {
-    agent any // This ensures the pipeline runs on any available agent
-
-    environment {
-        BASE_URL = 'https://qa.sep.tdtm.cydeo.com/taws'
-        USERNAME = credentials('automation-user-username')
-        PASSWORD = credentials('automation-user-password')
-    }
-
+    agent none // Ensures no global agent is used
+    
     stages {
         stage('Checkout') {
+            agent any // Runs on any available node/agent
             steps {
                 checkout scm
             }
         }
 
         stage('Install Dependencies') {
+            agent any // Runs on any available node/agent
             steps {
                 sh 'npm ci'
                 sh 'npx playwright install --with-deps'
@@ -22,6 +18,7 @@ pipeline {
         }
 
         stage('Run Tests') {
+            agent any // Runs on any available node/agent
             steps {
                 script {
                     withEnv([
@@ -38,8 +35,8 @@ pipeline {
 
     post {
         always {
-            // Move archiveArtifacts inside node block
-            node {
+            // Ensure to surround the step with the 'node' block for archiveArtifacts
+            node('my-agent') {  // Specify the Jenkins agent's label here
                 archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             }
         }
